@@ -1,0 +1,21 @@
+﻿<div class="col-12 col-md-12 col-lg-10">
+    <div class="box box-content">
+        <div class="pb-2">
+            <h1 class="title title--h1 first-title title__separate">رزومه</h1>
+        </div>
+
+        <div class="row">
+            <!-- Education -->
+            @await Component.InvokeAsync("Education")
+            <!-- Experience -->
+            @await Component.InvokeAsync("Experience")
+        </div>
+
+
+        <!-- Skills -->
+        @await Component.InvokeAsync("Skill")
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">© 1399 ملیکا خلیلیان</footer>

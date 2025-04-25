@@ -1,0 +1,16 @@
+﻿@model List<Resume.Domain.Dtos.Resume.Experience.FilterExperiencesDto>
+
+<div class="col-12">
+    <h2 class="title title--h3"><img class="title-icon" src="~/MainSite/assets/icons/icon-experience.svg" alt=""> تجربه</h2>
+    <div class="timeline">
+        <!-- Item -->
+        @foreach (var exp in Model)
+        {
+            <article class="timeline__item">
+                <h5 class="title title--h5 timeline__title">@exp.CompanyName</h5>
+                <span class="timeline__period">@exp.JobStartDate - @exp.JobEndDate</span>
+                <p class="timeline__description">@exp.Description</p>
+            </article>
+        }
+    </div>
+</div>

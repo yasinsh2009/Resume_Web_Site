@@ -1,0 +1,19 @@
+﻿@model List<Resume.Domain.Dtos.Resume.Skill.FilterSkillsDto>
+
+<div class="row">
+    <div class="col-12">
+        <h2 class="title title--h3">مهارت های من</h2>
+        <div class="box box__border">
+            <!-- Progress -->
+            @foreach (var item in Model)
+            {
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="@item.SkillPercent" aria-valuemin="0" aria-valuemax="100" style="width: @item.SkillPercent%; z-index: 2;">
+                        <div class="progress-text"><span>@item.SkillTitle</span><span>@item.SkillPercent%</span></div>
+                    </div>
+                    <div class="progress-text"><span>@item.SkillTitle</span></div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

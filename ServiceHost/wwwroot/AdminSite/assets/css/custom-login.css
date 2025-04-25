@@ -1,0 +1,10 @@
+﻿
+
+/*.IdentifierInput, .PasswordInput{
+    text-align : right;
+}*/
+
+.error-message{
+    margin-top : 15px;
+    text-align : left;
+}

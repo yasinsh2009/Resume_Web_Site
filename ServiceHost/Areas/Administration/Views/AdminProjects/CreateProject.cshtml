@@ -1,0 +1,83 @@
+﻿@using Resume.Domain.Dtos.Project.Project
+@model CreateProjectDto
+
+@{
+    ViewData["Title"] = "ایجاد نمونه کار جدید";
+}
+
+<partial name="_JqueryValidators" />
+
+<!-- نمایش پیام‌های موفقیت و خطا -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <ul class="breadcrumb breadcrumb-style " style="float:right">
+            <li class="breadcrumb-item">
+                <h4 class="page-title">مدیریت نمونه کار ها</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+                <a asp-area="administration" asp-controller="home" asp-action="index">
+                    <i class="fas fa-home"></i>داشبورد
+                </a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onclick="return false;">@ViewData["Title"]</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    <strong>ایجاد</strong> نمونه کار جدید
+                </h2>
+            </div>
+            <form asp-area="Administration" asp-controller="AdminProjects" asp-action="CreateProject" method="post" enctype="multipart/form-data">
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="ProjectTitle" placeholder="عنوان نمونه کار">
+                                    <span class="text-danger" asp-validation-for="ProjectTitle"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="Description" placeholder="توضیحات...">
+                                    <span class="text-danger" asp-validation-for="Description"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="projectImage">آپلود تصویر نمونه کار</label>
+                                <input type="file" class="form-control-file" name="projectImage" id="projectImage" accept="image/*">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-hover color-5 btn-block w-100 rounded">ثبت اطلاعات</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

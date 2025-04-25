@@ -1,0 +1,80 @@
+﻿@model Resume.Domain.Dtos.Blog.ArticleCategory.CreateArticleCategoryDto
+
+@{
+    ViewData["Title"] = "ایجاد دسته بندی مقالات جدید";
+}
+
+<partial name="_JqueryValidators" />
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <ul class="breadcrumb breadcrumb-style " style="float:right">
+            <li class="breadcrumb-item">
+                <h4 class="page-title">مدیریت دسته بندی های مقالات</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+                <a asp-area="administration" asp-controller="home" asp-action="index">
+                    <i class="fas fa-home"></i>داشبورد
+                </a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onclick="return false;">@ViewData["Title"]</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    <strong>ایجاد دسته بندی مقالات جدید</strong>
+                </h2>
+            </div>
+            <form asp-area="Administration" asp-controller="AdminBlogs" asp-action="CreateArticleCategory" method="post" enctype="multipart/form-data">
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="Title" placeholder="عنوان دسته بندی">
+                                    <span class="text-danger" asp-validation-for="Title"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="ShortDescription" placeholder="توضیحات کوتاه (اختیاری)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <textarea rows="4" class="form-control no-resize" asp-for="Description" placeholder="توضیحات (اختیاری)"></textarea>
+                                    <span class="text-danger" asp-validation-for="Description"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <label for="Image">آپلود تصویر دسته بندی مقالات (اختیاری)</label>
+                                    <input type="file" class="form-control-file" name="Image" id="Image" accept="image/*">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-hover color-5 btn-block w-100 rounded">ثبت اطلاعات</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

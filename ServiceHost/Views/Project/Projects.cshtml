@@ -1,0 +1,35 @@
+﻿@using Resume.Domain.Dtos.Project.Project
+@model List<FilterProjectsDto>
+
+@{
+    ViewData["Title"] = "نمونه کار های من";
+}
+
+<div class="col-12 col-md-12 col-lg-10">
+	<div class="box box-content">
+		<div class="pb-2">
+			<h1 class="title title--h1 first-title title__separate">@ViewData["Title"]</h1>
+		</div>
+
+		<!-- Gallery -->
+		<div class="gallery-grid js-grid-row js-filter-container" style="position: relative; height: 774px;">
+			<div class="gutter-sizer"></div>
+			<!-- Item 1 -->
+			@foreach (var item in Model)
+            {
+                <figure class="gallery-grid__item category-concept" style="position: absolute; left: 0%; top: 0px;">
+                    <div class="gallery-grid__image-wrap">
+                        <img class="gallery-grid__image cover medium-zoom-image ls-is-cached lazyloaded" src="~/content/project/@item.ProjectImage" data-zoom="" alt="">
+                    </div>
+                    <figcaption class="gallery-grid__caption">
+                        <h4 class="title title--h6 gallery-grid__title">@item.ProjectTitle</h4>
+                        <span class="gallery-grid__category">@item.Description</span>
+                    </figcaption>
+                </figure>
+            }
+		</div><!-- Gallery End -->
+	</div>
+
+	<!-- Footer -->
+	<footer class="footer">© 1399 ملیکا خلیلیان</footer>
+</div>

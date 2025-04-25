@@ -1,0 +1,135 @@
+﻿@model List<Resume.Domain.Dtos.Resume.Skill.FilterSkillsDto>
+
+@{
+    ViewData["Title"] = "لیست مهارت ها";
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <ul class="breadcrumb breadcrumb-style " style="float:right">
+            <li class="breadcrumb-item">
+                <h4 class="page-title">مدیریت مهارت ها</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+                <a asp-area="Administration" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-home"></i>داشبورد
+                </a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onclick="return false;">@ViewData["Title"]</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+@* <form asp-area="Administration" asp-controller="User" asp-action="UserList" method="get">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        <strong>جستجو</strong>
+                    </h2>
+                </div>
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input type="text" name="FullName" class="form-control">
+                                    <label class="form-label">نام و نام خانوادگی</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input type="text" name="PhoneNumber" class="form-control">
+                                    <label class="form-label">شماره تلفن</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="col-lg-8">
+                                <button type="submit" class="btn bg-purple waves-effect">
+                                    <i class="material-icons">search</i>
+                                    <span>جستجو</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form> *@
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card" style="overflow:hidden">
+            <div class="body">
+                <div class="table-responsive">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12" style="padding-left:14px;">
+                                <div id="DataTables_Table_0_filter" class="dataTables_filter">
+                                    <a asp-area="Administration" asp-controller="AdminResume" asp-action="CreateSkill" type="button" class="btn btn-primary waves-effect mb-1 ml-1"><i class="material-icons">add</i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-hover js-basic-example contact_list dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="text-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 50.9667px;" aria-sort="ascending">ردیف</th>
+                                            <th class="text-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 50.9667px;" aria-sort="ascending">عنوان مهارت</th>
+                                            <th class="text-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 170.75px;">درصد توانایی مهارت</th>
+                                            <th class="text-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 121.7333px;">تاریخ ایجاد</th>
+                                            <th class="text-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 62.7333px;">اقدام</th>
+                                        </tr>
+                                    </thead>
+                                    @if (Model != null)
+                                    {
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr role="row" class="odd">
+                                                    <td class="text-center">@item.Id</td>
+                                                    <td class="text-center">@item.SkillTitle</td>
+                                                    <td class="text-center">
+                                                        <div class="progress shadow-style">
+                                                            <div class="progress-bar width-per-@item.SkillPercent" role="progressbar" aria-valuenow="@item.SkillPercent" aria-valuemin="0" aria-valuemax="100">@item.SkillPercent%</div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">@item.CreateDate</td>
+                                                    <td class="text-center">
+                                                        <a class="btn tblActnBtn" asp-area="Administration"
+                                                           asp-controller="AdminResume" asp-action="EditSkill" asp-route-id="@item.Id">
+                                                            <i class="material-icons">mode_edit</i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    }
+                                    else
+                                    {
+                                        <div class="alert alert-danger">
+                                            <strong>متاسفم!</strong> اطلاعاتی یافت نشد.
+                                        </div>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,101 @@
+﻿@using Resume.Domain.Dtos.User
+
+@{
+    UserDetailDto user = ViewData["User"] as UserDetailDto ?? new UserDetailDto();
+}
+
+
+<aside id="leftsidebar" class="sidebar">
+    <!-- Menu -->
+    <div class="menu">
+        <ul class="list">
+            <li>
+                <div class="sidebar-profile clearfix">
+                    <div class="profile-img">
+                        <img src="~/content/user/@user.Avatar" alt="@user.FullName">
+                    </div>
+                    <div class="profile-info">
+                        <h3>@user.FullName</h3>
+                        <p>خوش آمدید !</p>
+                    </div>
+                </div>
+            </li>
+            <li class="active">
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="menu-icon fas fa-home"></i>
+                    <span>صفحه اصلی</span>
+                </a>
+                <ul class="ml-menu">
+                    <li class="active">
+                        <a asp-area="Administration" asp-controller="Home" asp-action="Index">داشبورد</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="menu-icon fas fa-user"></i>
+                    <span>مدیریت کابران</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-area="Administration" asp-controller="User" asp-action="UserList">لیست کاربران</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="menu-icon fas fa-school"></i>
+                    <span>مدیریت رزومه</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-area="Administration" asp-controller="AdminResume" asp-action="FilterEducations">لیست تحصیلات</a>
+                    </li>
+                    <li>
+                        <a asp-area="Administration" asp-controller="AdminResume" asp-action="FilterExperiences">لیست سوابق شغلی</a>
+                    </li>
+                    <li>
+                        <a asp-area="Administration" asp-controller="AdminResume" asp-action="FilterSkills">لیست مهارت ها</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="menu-icon fas fa-school"></i>
+                    <span>مدیریت نمونه کار ها</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-area="Administration" asp-controller="AdminProjects" asp-action="FilterProjects">لیست نمونه کار ها</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="menu-icon fas fa-message"></i>
+                    <span>مدیریت ارتباطات</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-area="Administration" asp-controller="AdminContactMessages" asp-action="FilterContactMessages">لیست پیغام های دریافتی</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="menu-icon fas fa-blog"></i>
+                    <span>مدیریت مقالات</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-area="Administration" asp-controller="AdminBlogs" asp-action="FilterArticleCategories">لیست دسته بندی مقالات</a>
+                    </li>
+                    <li>
+                        <a asp-area="Administration" asp-controller="AdminBlogs" asp-action="FilterArticles">لیست مقالات</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <!-- #Menu -->
+</aside>

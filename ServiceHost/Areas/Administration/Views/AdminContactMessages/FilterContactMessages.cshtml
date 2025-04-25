@@ -1,0 +1,105 @@
+﻿@model List<Resume.Domain.Dtos.Contact.FilterContactMessageDto>
+
+@{
+    ViewData["Title"] = "پیغام های دریافتی";
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <ul class="breadcrumb breadcrumb-style " style="float:right">
+            <li class="breadcrumb-item">
+                <h4 class="page-title">@ViewData["Title"]</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+                <a asp-area="Administration" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-home"></i>داشبورد
+                </a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onclick="return false;">@ViewData["Title"]</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+@* <form asp-area="Administration" asp-controller="User" asp-action="UserList" method="get">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        <strong>جستجو</strong>
+                    </h2>
+                </div>
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input type="text" name="FullName" class="form-control">
+                                    <label class="form-label">نام و نام خانوادگی</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input type="text" name="PhoneNumber" class="form-control">
+                                    <label class="form-label">شماره تلفن</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="col-lg-8">
+                                <button type="submit" class="btn bg-purple waves-effect">
+                                    <i class="material-icons">search</i>
+                                    <span>جستجو</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form> *@
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="card">
+                <div class="header bg-green">
+                    <h2>
+                        @item.Fullname
+                        @if (@item.EmailAddress != null)
+                        {
+                            <small>@item.EmailAddress</small>
+                        }
+                        else
+                        {
+                            <small>بدون ایمیل</small>
+                        }
+                    </h2>
+                    <ul class="header-dropdown m-r-0">
+                        <li>
+                            <a href="#" onclick="return false;">
+                                <i class="material-icons">info_outline</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="return false;">
+                                <i class="material-icons">help_outline</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    @item.Message
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

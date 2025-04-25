@@ -1,0 +1,141 @@
+﻿@model Resume.Domain.Dtos.User.RegisterUserDto
+
+@{
+    ViewData["Title"] = "ایجاد کاربر جدید";
+}
+
+<partial name="_JqueryValidators" />
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <ul class="breadcrumb breadcrumb-style " style="float:right">
+            <li class="breadcrumb-item">
+                <h4 class="page-title">مدیریت کابران</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+                <a asp-area="administration" asp-controller="home" asp-action="index">
+                    <i class="fas fa-home"></i>داشبورد
+                </a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onclick="return false;">@ViewData["Title"]</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    <strong>ایجاد</strong> کاربر جدید
+                </h2>
+            </div>
+            <form asp-area="Administration" asp-controller="User" asp-action="CreateUser" method="post" enctype="multipart/form-data">
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="FullName" placeholder="نام و نام خانوادگی">
+                                    <span class="text-danger" asp-validation-for="FullName"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="PhoneNumber" placeholder="شماره تلفن">
+                                    <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="EmailAddress" placeholder="ایمیل">
+                                    <span class="text-danger" asp-validation-for="EmailAddress"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="BirthPlace" placeholder="محل تولد">
+                                    <span class="text-danger" asp-validation-for="BirthPlace"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="BirthDate" placeholder="تاریخ تولد">
+                                    <span class="text-danger" asp-validation-for="BirthDate"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="Description" placeholder="توضیحات">
+                                    <span class="text-danger" asp-validation-for="Description"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="Password" placeholder="رمز عبور">
+                                    <span class="text-danger" asp-validation-for="Password"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="ConfirmPassword" placeholder="تکرار رمز عبور">
+                                    <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <p>
+                                        <label>
+                                            <input type="checkbox" asp-for="IsBlock" checked="checked">
+                                            <span>بلاک شده / نشده</span>
+                                        </label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <div class="file-field input-field">
+                                        <div class="btn">
+                                            <span>آپلود تصویر پروفایل</span>
+                                            <input type="file">
+                                        </div>
+                                        <div class="file-path-wrapper">
+                                            <input class="file-path validate" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-hover color-5 btn-block w-100 rounded">ثبت اطلاعات</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

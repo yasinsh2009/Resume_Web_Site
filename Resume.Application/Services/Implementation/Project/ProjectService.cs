@@ -1,0 +1,256 @@
+﻿using MarketPlace.Application.Utilities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Resume.Application.Services.Interface.Project;
+using Resume.Domain.Dtos.Project.Project;
+using Resume.Domain.Dtos.Project.ProjectCategory;
+using Resume.Domain.Entities.Project;
+using Resume.Domain.Repository;
+
+namespace Resume.Application.Services.Implementation.Project
+{
+    public class ProjectService : IProjectService
+    {
+        #region Fields
+
+        private readonly IGenericRepository<Domain.Entities.Project.Project> _projectRepository;
+        private readonly IGenericRepository<ProjectCategory> _projectCategoryRepository;
+
+        #endregion
+
+        #region Constructor
+
+        public ProjectService(IGenericRepository<Domain.Entities.Project.Project> projectRepository, IGenericRepository<ProjectCategory> projectCategoryRepository)
+        {
+            _projectRepository = projectRepository;
+            _projectCategoryRepository = projectCategoryRepository;
+        }
+
+        #endregion
+
+        #region Project - Category
+
+        #region Filter - Project - Categories
+
+        public async Task<List<FilterProjectCategoriesDto>> GetAllProjectCategories()
+        {
+            return await _projectCategoryRepository
+                .GetQuery()
+                .AsQueryable()
+                .Where(x => !x.IsDelete)
+                .Select(x => new FilterProjectCategoriesDto
+                {
+                    Id = x.Id,
+                    Image = x.Image,
+                    Description = x.Description,
+                    CreateDate = x.CreateDate.ToStringShamsiDate()
+                }).OrderByDescending(x => x.Id)
+                .ToListAsync();
+        }
+
+        #endregion
+
+        #region Create - Project - Category
+
+        public async Task<CreateProjectCategoryResult> CreateProjectCategory(CreateProjectCategoryDto command, IFormFile? image)
+        {
+            if (command == null)
+            {
+                return CreateProjectCategoryResult.Failed("داده های ورودی نامعتبر است.");
+            }
+
+            try
+            {
+                if (image == null || image.Length == 0)
+                {
+                    return CreateProjectCategoryResult.Failed("تصویر دسته بندی پروژه الزامی است");
+                }
+
+                var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "projectCategory");
+                if (!Directory.Exists(uploadDirectory))
+                {
+                    Directory.CreateDirectory(uploadDirectory);
+                }
+
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+                var filePath = Path.Combine(uploadDirectory, fileName);
+
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await image.CopyToAsync(stream);
+
+                var newProjectCategory = new ProjectCategory(fileName, command.Title, command.Description);
+
+                await _projectCategoryRepository.AddEntity(newProjectCategory);
+                await _projectCategoryRepository.SaveChanges();
+
+                return CreateProjectCategoryResult.Success();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating project : {ex.Message}");
+                return CreateProjectCategoryResult.Failed("خطایی در ایجاد دسته بندی پروژه رخ داد.");
+            }
+        }
+
+        #endregion
+
+        #region Edit - Project - Category
+
+        public async Task<EditProjectCategoryDto> GetProjectCategoryForEdit(long id)
+        {
+            var projectCategory = await _projectCategoryRepository
+                .GetQuery()
+                .AsQueryable()
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (projectCategory == null)
+            {
+                return new EditProjectCategoryDto
+                {
+                    Title = null,
+                    Description = null,
+                };
+            }
+
+            return new EditProjectCategoryDto
+            {
+                Title = projectCategory.Title,
+                Description = projectCategory.Description,
+            };
+        }
+
+        public async Task<EditProjectCategoryResult> EditProjectCategory(EditProjectCategoryDto command, IFormFile? image)
+        {
+            var existingProjectCategory = await _projectCategoryRepository
+                .GetQuery()
+                .AsQueryable()
+                .FirstOrDefaultAsync(x => x.Id == command.Id);
+
+            if (existingProjectCategory == null)
+            {
+                return EditProjectCategoryResult.Failed("اطلاعات مورد نظر یافت نشد.");
+            }
+
+            if (image == null || image.Length == 0)
+            {
+                return EditProjectCategoryResult.Failed("لطفا تصویر را اصلاح کنید.");
+            }
+
+            var uploadDirectory =
+                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "projectCategory");
+            if (!Directory.Exists(uploadDirectory))
+            {
+                Directory.CreateDirectory(uploadDirectory);
+            }
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+            var filePath = Path.Combine(uploadDirectory, fileName);
+
+            await using var stream = new FileStream(filePath, FileMode.Create);
+            await image.CopyToAsync(stream);
+
+            existingProjectCategory.Title = command.Title;
+            existingProjectCategory.Description = command.Description;
+            existingProjectCategory.Image = fileName;
+
+            _projectCategoryRepository.UpdateEntity(existingProjectCategory);
+            await _projectCategoryRepository.SaveChanges();
+
+            return EditProjectCategoryResult.Success();
+        }
+
+        public Task<List<GetAllProjectCategoriesDto>> GetProjectCategories()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Project
+
+        #region Filter - Projects
+
+        public async Task<List<FilterProjectsDto>> GetAllProjects()
+        {
+            return await _projectRepository
+                .GetQuery()
+                .AsQueryable()
+                .Where(x => !x.IsDelete)
+                .Include(x => x.ProjectCategory)
+                .Select(x => new FilterProjectsDto
+                {
+                    Id = x.Id,
+                    ProjectCategoryTitle = x.ProjectCategory.Title,
+                    ProjectTitle = x.ProjectTitle,
+                    ProjectImage = x.ProjectImage,
+                    Description = x.Description,
+                    CreateDate = x.CreateDate.ToStringShamsiDate()
+                }).OrderByDescending(x => x.Id)
+                .ToListAsync();
+        }
+
+        #endregion
+
+        #region Create - Project
+
+        public async Task<CreateProjectResult> CreateProject(CreateProjectDto command, IFormFile projectImage)
+        {
+            if (command == null)
+            {
+                return CreateProjectResult.Failed("داده های ورودی نامعتبر است.");
+            }
+
+            try
+            {
+                if (projectImage != null || projectImage.Length == 0)
+                {
+                    return CreateProjectResult.Failed("تصویر پروژه الزامی است");
+                }
+
+                var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "project");
+                if ()
+                {
+                    
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Edit - Project
+
+        public Task<EditProjectDto> GetProjectForEdit(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<EditProjectResult> EditProject(EditProjectDto command)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Dispose
+
+        public async ValueTask DisposeAsync()
+        {
+            if (_projectRepository != null && _projectCategoryRepository != null)
+            {
+                await _projectRepository.DisposeAsync();
+                await _projectCategoryRepository.DisposeAsync();
+            }
+        }
+
+        #endregion
+    }
+}

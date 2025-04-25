@@ -1,0 +1,29 @@
+﻿@model Resume.Domain.Dtos.User.UserDetailDto
+
+
+<header class="header box">
+	<div class="header__left">
+		<div class="header__photo">
+			<img class="header__photo-img" src="~/content/user/@Model.Avatar" alt="@Model.FullName">
+		</div>
+		<div class="header__base-info">
+			<h4 class="title titl--h4">@Model.FullName</h4>
+			<div class="status">@Model.Description</div>
+			<ul class="header__social">
+				<li><a href="https://www.facebook.com/"><i class="font-icon icon-facebook1"></i></a></li>
+				<li><a href="https://www.twitter.com/"><i class="font-icon icon-twitter1"></i></a></li>
+				<li><a href="https://www.instagram.com/"><i class="font-icon icon-instagram1"></i></a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="header__right">
+		<ul class="header__contact">
+			<li><span class="overhead">ایمیل</span>@Model.Email</li>
+			<li><span class="overhead">تلفن</span>@Model.PhoneNumber</li>
+		</ul>
+		<ul class="header__contact">
+			<li><span class="overhead">تولد</span>@Model.BirthDate</li>
+			<li><span class="overhead">محل تولد</span>@Model.BirthPlace</li>
+		</ul>
+	</div>
+</header>

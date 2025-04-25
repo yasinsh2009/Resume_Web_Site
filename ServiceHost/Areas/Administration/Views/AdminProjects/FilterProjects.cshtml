@@ -1,0 +1,117 @@
+﻿@using Resume.Domain.Dtos.Project.Project
+@model List<FilterProjectsDto>
+
+@{
+    ViewData["Title"] = "نمونه کار ها";
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <ul class="breadcrumb breadcrumb-style " style="float:right">
+            <li class="breadcrumb-item">
+                <h4 class="page-title">مدیریت نمونه کار ها</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+                <a asp-area="Administration" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-home"></i>داشبورد
+                </a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onclick="return false;">@ViewData["Title"]</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+@* <form asp-area="Administration" asp-controller="User" asp-action="UserList" method="get">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        <strong>جستجو</strong>
+                    </h2>
+                </div>
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input type="text" name="FullName" class="form-control">
+                                    <label class="form-label">نام و نام خانوادگی</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input type="text" name="PhoneNumber" class="form-control">
+                                    <label class="form-label">شماره تلفن</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="col-lg-8">
+                                <button type="submit" class="btn bg-purple waves-effect">
+                                    <i class="material-icons">search</i>
+                                    <span>جستجو</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form> *@
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="card">
+        <div class="body">
+            <div class="bootstrap snippet">
+                <section id="portfolio" class="gray-bg padding-top-bottom">
+                    <!--==== Portfolio Filters ====-->
+                    <div class="categories">
+                        <ul class="ul-categories">
+                            <li class="active">
+                                <a href="#" data-filter="*">همه دسته بندی ها</a>
+                            </li>
+                            <li>
+                                <a asp-area="Administration"
+                                   asp-controller="AdminProjects"
+                                   asp-action="CreateProject"
+                                   type="button" class="btn bg-purple btn-circle waves-effect waves-circle waves-float" data-filter="*">
+                                    <i class="material-icons">add</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- ======= Portfolio items ===-->
+                    <div class="projects-container scrollimation in">
+                        <div class="row">
+                            @foreach (var item in Model)
+                            {
+                                <article class="col-md-4 col-sm-6 portfolio-item web-design apps psd">
+                                    <div class="portfolio-thumb in">
+                                        <a href="#" class="main-link">
+                                            <div class="project-create-date">
+                                                <span class="label label-info">اضافه شده در @item.CreateDate</span>
+                                            </div>
+                                            <img class="img-responsive img-center" src="~/content/project/@item.ProjectImage" alt="@item.ProjectTitle">
+                                            <span class="project-title">@item.Description</span>
+                                            <span class="overlay-mask"></span>
+                                        </a>
+                                        @* <a class="enlarge cboxElement" href="#" title="Bills Project"><i class="fa fa-expand fa-fw"></i></a> *@
+                                        <a class="link" asp-area="Administration" asp-controller="AdminProjects" asp-action="EditProjects"><i class="material-icons">mode_edit</i></a>
+                                    </div>
+                                    <div class="badge col-purple project-description">@item.ProjectTitle</div>
+                                </article>
+                            }
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
