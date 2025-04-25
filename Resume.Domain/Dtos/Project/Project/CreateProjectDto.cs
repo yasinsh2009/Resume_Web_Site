@@ -15,7 +15,7 @@ namespace Resume.Domain.Dtos.Project.Project
         [Display(Name = "توضیحات")]
         [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
         [MaxLength(450, ErrorMessage = "{0} نمی‌تواند از {1} بیشتر باشد")]
-        public required string Description { get; set; }
+        public required string? Description { get; set; }
     }
 
     public class CreateProjectResult(bool isSuccess, string? message = null)

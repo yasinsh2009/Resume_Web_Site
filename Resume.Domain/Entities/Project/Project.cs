@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Resume.Domain.Entities.Project
 {
-    public class Project(string projectImage, string projectTitle, string description) : BaseEntity
+    public class Project(string projectImage, string projectTitle, string? description) : BaseEntity
     {
         #region Properties
 
@@ -22,7 +22,7 @@ namespace Resume.Domain.Entities.Project
         [Display(Name = "توضیحات")]
         [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
         [MaxLength(450, ErrorMessage = "{0} نمی تواند از {1} بیشتر باشد")]
-        public string Description { get; set; } = description;
+        public string? Description { get; set; } = description;
 
         #endregion
 

@@ -11,7 +11,7 @@ public interface IProjectService : IAsyncDisposable
     Task<List<FilterProjectsDto>> GetAllProjects();
     Task<CreateProjectResult> CreateProject(CreateProjectDto command, IFormFile projectImage);
     Task<EditProjectDto> GetProjectForEdit(long id);
-    Task<EditProjectResult> EditProject(EditProjectDto command);
+    Task<EditProjectResult> EditProject(EditProjectDto command, IFormFile? image);
 
     #endregion
 

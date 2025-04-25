@@ -1,7 +1,7 @@
-﻿@model Resume.Domain.Dtos.Project.ProjectCategory.CreateProjectCategoryDto
+﻿@model Resume.Domain.Dtos.Project.ProjectCategory.EditProjectCategoryDto
 
 @{
-    ViewData["Title"] = "ایجاد دسته بندی نمونه کار جدید";
+    ViewData["Title"] = $"ویرایش دسته بندی نمونه کار / {ViewBag.Title}";
 }
 
 <partial name="_JqueryValidators" />
@@ -29,10 +29,10 @@
         <div class="card">
             <div class="header">
                 <h2>
-                    <strong>ایجاد دسته بندی نمونه کار جدید</strong>
+                    <strong>@ViewData["Title"]</strong>
                 </h2>
             </div>
-            <form asp-area="Administration" asp-controller="AdminProjects" asp-action="CreateProjectCategory" method="post" enctype="multipart/form-data">
+            <form asp-area="Administration" asp-controller="AdminProjects" asp-action="EditProjectCategory" method="post" enctype="multipart/form-data">
                 <div class="body">
                     <div class="row clearfix">
                         <div class="col-md-12">
@@ -58,7 +58,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <label for="Image">آپلود تصویر دسته بندی مقالات (اختیاری)</label>
+                                    <label for="Image">آپلود تصویر دسته بندی نمونه کار ها (اختیاری)</label>
                                     <input type="file" class="form-control-file" name="Image" id="Image" accept="image/*">
                                 </div>
                             </div>
@@ -70,4 +70,5 @@
         </div>
     </div>
 </div>
+
 

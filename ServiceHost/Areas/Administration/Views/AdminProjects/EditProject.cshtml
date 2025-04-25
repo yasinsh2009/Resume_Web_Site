@@ -1,7 +1,7 @@
-﻿@model Resume.Domain.Dtos.Project.ProjectCategory.CreateProjectCategoryDto
+﻿@model Resume.Domain.Dtos.Project.Project.EditProjectDto
 
 @{
-    ViewData["Title"] = "ایجاد دسته بندی نمونه کار جدید";
+    ViewData["Title"] = $"ویرایش نمونه کار : {ViewBag.Title}";
 }
 
 <partial name="_JqueryValidators" />
@@ -10,7 +10,7 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <ul class="breadcrumb breadcrumb-style " style="float:right">
             <li class="breadcrumb-item">
-                <h4 class="page-title">مدیریت دسته بندی های نمونه کار</h4>
+                <h4 class="page-title">مدیریت نمونه کار ها</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
                 <a asp-area="administration" asp-controller="home" asp-action="index">
@@ -29,17 +29,37 @@
         <div class="card">
             <div class="header">
                 <h2>
-                    <strong>ایجاد دسته بندی نمونه کار جدید</strong>
+                    <strong>@ViewData["Title"]</strong>
                 </h2>
             </div>
-            <form asp-area="Administration" asp-controller="AdminProjects" asp-action="CreateProjectCategory" method="post" enctype="multipart/form-data">
+            <form asp-area="Administration" asp-controller="AdminBlogs" asp-action="CreateArticle" method="post" enctype="multipart/form-data">
                 <div class="body">
                     <div class="row clearfix">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="form-control mb-2" asp-for="Title" placeholder="عنوان دسته بندی">
-                                    <span class="text-danger" asp-validation-for="Title"></span>
+                                    <input type="text" class="form-control mb-2" asp-for="ProjectTitle" placeholder="عنوان مقاله">
+                                    <span class="text-danger" asp-validation-for="ProjectTitle"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    @if (ViewBag.Category != null)
+                                    {
+                                        <select class="browser-default" asp-for="ProjectCategoryId" asp-items='new SelectList(ViewBag.Category, "CategoryId", "ProjectCategoryTitle")'>
+                                            <option value="" disabled="" selected="">دسته بندی مورد نظر را انتخاب نمایید...</option>
+                                        </select>
+                                        <span class="text-danger" asp-validation-for="ProjectCategoryId"></span>
+                                    }
+                                    else
+                                    {
+                                        <select class="browser-default">
+                                            <option value="" disabled="" selected="">هیچ دسته بندی ای موجود نیست.
+                                            </option>
+                                        </select>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -48,7 +68,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <textarea rows="4" class="form-control no-resize" asp-for="Description" placeholder="توضیحات (اختیاری)"></textarea>
+                                    <textarea asp-for="Description" class="form-control mb-4" placeholder="توضیحات (اختیاری)"></textarea>
                                     <span class="text-danger" asp-validation-for="Description"></span>
                                 </div>
                             </div>
@@ -70,4 +90,3 @@
         </div>
     </div>
 </div>
-

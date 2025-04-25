@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Versioning;
 using Resume.Application.Services.Interface.Project;
 using Resume.Domain.Dtos.Project.Project;
 using Resume.Domain.Dtos.Project.ProjectCategory;
@@ -21,7 +22,7 @@ namespace ServiceHost.Areas.Administration.Controllers
 
         #endregion
 
-        #region Create - Project - Categories
+        #region Create - Project - Category
 
         [HttpGet("create-project-category")]
         public IActionResult CreateProjectCategory()
@@ -48,9 +49,52 @@ namespace ServiceHost.Areas.Administration.Controllers
             }
 
             TempData["ErrorMessage"] = result.Message ?? "ایجاد دسته بندی پروژه با خطا مواجه شد.";
-            return View(result);
-        } 
-         
+            return View(projectCategory);
+        }
+
+        #endregion
+
+        #region Edit - Project - Category
+
+        [HttpGet("edit-project-category/{id}")]
+        public async Task<IActionResult> EditProjectCategory(long id)
+        {
+            var projectCategory = await projectService.GetProjectCategoryForEdit(id);
+
+            ViewBag.Title = projectCategory.Title;
+
+            if (projectCategory == null)
+            {
+                return NotFound();
+            }
+
+            return View(projectCategory);
+        }
+
+        [HttpPost("edit-project-category/{id}")]
+        public async Task<IActionResult> EditProjectCategory(EditProjectCategoryDto projectCategory, IFormFile? image)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var result = await projectService.EditProjectCategory(projectCategory, image);
+
+            if (result.IsSuccess)
+            {
+                TempData["SuccessMessage"] = "دسته بندی نمونه کار با موفقیت ویرایش شد.";
+                return RedirectToAction("FilterProjectCategories",
+                    "AdminProjects",
+                    new { area = "Administration" });
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message ?? "ویرایش دسته بندی نمونه کار با خطا مواجه شد.";
+                return View(projectCategory);
+            }
+        }
+
         #endregion
 
         #endregion
@@ -73,6 +117,9 @@ namespace ServiceHost.Areas.Administration.Controllers
         [HttpGet("create-project")]
         public IActionResult CreateProject()
         {
+            var projectCategory = projectService.GetProjectCategories();
+            ViewBag.Category = projectCategory;
+
             return View();
         }
 
@@ -100,7 +147,50 @@ namespace ServiceHost.Areas.Administration.Controllers
         }
 
 
-#endregion
+        #endregion
+
+        #region Edit - Project
+
+        [HttpGet("edit-project/{id}")]
+        public async Task<IActionResult> EditProject(long id)
+        {
+            var project = await projectService.GetProjectForEdit(id);
+
+            ViewBag.Title = project.ProjectTitle;
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return View(project);
+        }
+
+        [HttpPost("edit-project/{id}")]
+        public async Task<IActionResult> EditProject(EditProjectDto project, IFormFile? image)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var result = await projectService.EditProject(project, image);
+
+            if (result.IsSuccess)
+            {
+                TempData["SuccessMessage"] = "نمونه کار با موفقیت ویرایش شد.";
+                return RedirectToAction("FilterProjectCategories",
+                    "AdminProjects",
+                    new { area = "Administration" });
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message ?? "ویرایش نمونه کار با خطا مواجه شد.";
+                return View(project);
+            }
+        }
+
+        #endregion
 
         #endregion
     }

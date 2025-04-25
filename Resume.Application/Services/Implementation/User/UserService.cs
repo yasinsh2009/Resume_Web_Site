@@ -5,6 +5,7 @@ using Resume.Application.Services.Interface.User;
 using Resume.Application.Tools;
 using Resume.Domain.Dtos.User;
 using Resume.Domain.Repository;
+using System.Net.Mail;
 
 namespace Resume.Application.Services.Implementation.User
 {
@@ -315,14 +316,9 @@ namespace Resume.Application.Services.Implementation.User
                 .AsQueryable()
                 .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
 
-            return new Domain.Entities.User.User
-            {
-                FullName = user.FullName,
-                PhoneNumber = phoneNumber,
-                EmailAddress = user.EmailAddress,
-                Password = user.Password,
-                Avatar = user.Avatar
-            };
+            return new Domain.Entities.User.User(user.FullName, user.PhoneNumber, user.EmailAddress, user.BirthPlace,
+                user.BirthDate, user.Description, user.Password, user.ConfirmPassword, user.PasswordSalt, user.IsBlock,
+                user.Avatar);
         }
 
         public async Task<Domain.Entities.User.User> GetUserByEa(string emailAddress)
@@ -332,14 +328,9 @@ namespace Resume.Application.Services.Implementation.User
                 .AsQueryable()
                 .FirstOrDefaultAsync(x => x.EmailAddress == emailAddress);
 
-            return new Domain.Entities.User.User
-            {
-                FullName = user.FullName,
-                PhoneNumber = user.PhoneNumber,
-                EmailAddress = emailAddress,
-                Password = user.Password,
-                Avatar = user.Avatar
-            };
+            return new Domain.Entities.User.User(user.FullName, user.PhoneNumber, user.EmailAddress, user.BirthPlace,
+                user.BirthDate, user.Description, user.Password, user.ConfirmPassword, user.PasswordSalt, user.IsBlock,
+                user.Avatar);
         }
 
         public async Task<UserDetailDto> GetUserById(long Id)

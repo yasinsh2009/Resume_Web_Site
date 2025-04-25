@@ -4,6 +4,7 @@ namespace Resume.Domain.Dtos.Project.ProjectCategory
 {
     public class CreateProjectCategoryDto
     {
+
         [Display(Name = "عنوان دسته بندی نمونه کار")]
         [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
         [MaxLength(100, ErrorMessage = "{0} نمی تواند از {1} بیشتر باشد")]

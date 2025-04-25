@@ -1,4 +1,5 @@
-﻿using MarketPlace.Application.Utilities;
+﻿using System.Security.Cryptography.X509Certificates;
+using MarketPlace.Application.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Resume.Application.Services.Interface.Project;
@@ -87,7 +88,7 @@ namespace Resume.Application.Services.Implementation.Project
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating project : {ex.Message}");
+                Console.WriteLine($"Error creating project category : {ex.Message}");
                 return CreateProjectCategoryResult.Failed("خطایی در ایجاد دسته بندی پروژه رخ داد.");
             }
         }
@@ -159,9 +160,21 @@ namespace Resume.Application.Services.Implementation.Project
             return EditProjectCategoryResult.Success();
         }
 
-        public Task<List<GetAllProjectCategoriesDto>> GetProjectCategories()
+        #endregion
+
+        #region Get - Project - Categories
+
+        public async Task<List<GetAllProjectCategoriesDto>> GetProjectCategories()
         {
-            throw new NotImplementedException();
+            return await _projectCategoryRepository
+                .GetQuery()
+                .Where(x => !x.IsDelete)
+                .Select(x => new GetAllProjectCategoriesDto
+                {
+                    CategoryId = x.Id,
+                    ProjectCategoryTitle = x.Title
+                }).OrderByDescending(x => x.CategoryId)
+                .ToListAsync();
         }
 
         #endregion
@@ -204,21 +217,30 @@ namespace Resume.Application.Services.Implementation.Project
 
             try
             {
-                if (projectImage != null || projectImage.Length == 0)
+                var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "project");
+                if (!Directory.Exists(uploadDirectory))
                 {
-                    return CreateProjectResult.Failed("تصویر پروژه الزامی است");
+                    Directory.CreateDirectory(uploadDirectory);
                 }
 
-                var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "project");
-                if ()
-                {
-                    
-                }
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(projectImage.FileName)}";
+                var filePath = Path.Combine(uploadDirectory, fileName);
+
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await projectImage.CopyToAsync(stream);
+
+                var newProject = new Domain.Entities.Project.Project(fileName, command.ProjectTitle,
+                    command.Description);
+
+                await _projectRepository.AddEntity(newProject);
+                await _projectRepository.SaveChanges();
+
+                return CreateProjectResult.Success();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e);
-                throw;
+                Console.WriteLine($"Error Creating project ; {ex.Message}");
+                return CreateProjectResult.Failed("خطایی در ایجاد پروژه رخ داد.");
             }
         }
 
@@ -226,14 +248,62 @@ namespace Resume.Application.Services.Implementation.Project
 
         #region Edit - Project
 
-        public Task<EditProjectDto> GetProjectForEdit(long id)
+        public async Task<EditProjectDto> GetProjectForEdit(long id)
         {
-            throw new NotImplementedException();
+            var project = await _projectRepository
+                .GetQuery()
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (project == null)
+            {
+                return new EditProjectDto
+                {
+                    ProjectTitle = null,
+                    Description = null
+                };
+            }
+
+            return new EditProjectDto
+            {
+                Id = id,
+                ProjectTitle = project.ProjectTitle,
+                Description = project.Description,
+            };
         }
 
-        public Task<EditProjectResult> EditProject(EditProjectDto command)
+        public async Task<EditProjectResult> EditProject(EditProjectDto command, IFormFile? image)
         {
-            throw new NotImplementedException();
+            var existingProject = await _projectRepository
+                .GetQuery()
+                .FirstOrDefaultAsync(x => x.Id == command.Id);
+
+            if (existingProject == null)
+            {
+                return EditProjectResult.NotFound("در یافتن نمونه کار مورد نظر خطایی رخ داد.");
+            }
+
+            var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(),
+                "wwwroot", "content", "project");
+            if (!Directory.Exists(uploadDirectory))
+            {
+                Directory.CreateDirectory(uploadDirectory);
+            }
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image?.FileName)}";
+            var filePath = Path.Combine(uploadDirectory, fileName);
+
+            await using var stream = new FileStream(filePath, FileMode.Create);
+            await image.CopyToAsync(stream);
+
+            existingProject.ProjectCategoryId = command.Id;
+            existingProject.ProjectTitle = command.ProjectTitle;
+            existingProject.Description = command.Description;
+            existingProject.ProjectImage = fileName;
+
+            _projectRepository.UpdateEntity(existingProject);
+            await _projectRepository.SaveChanges();
+
+            return EditProjectResult.Success();
         }
 
         #endregion
