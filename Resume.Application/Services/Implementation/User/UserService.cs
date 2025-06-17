@@ -92,7 +92,6 @@ namespace Resume.Application.Services.Implementation.User
 
         public async Task<CreateUserResult> CreateUser(RegisterUserDto user, IFormFile avatarImage)
         {
-            // بررسی وجود شماره تلفن کاربر
             if (await IsUserExistByPn(user.PhoneNumber))
             {
                 return CreateUserResult.DuplicatePhoneNumber;
@@ -100,7 +99,6 @@ namespace Resume.Application.Services.Implementation.User
 
             string? fileName = null;
 
-            // مدیریت تصویر آواتار (در صورت وجود)
             if (avatarImage != null && avatarImage.Length > 0)
             {
                 var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "user");
@@ -117,26 +115,21 @@ namespace Resume.Application.Services.Implementation.User
                 await avatarImage.CopyToAsync(stream);
             }
 
-            // تولید Salt و رمزگذاری رمز عبور
             var salt = NewPasswordHasher.GenerateSalt();
             var hashedPassword = NewPasswordHasher.HashPassword(user.Password, salt);
 
-            // ایجاد شی کاربر جدید
             var newUser = new Domain.Entities.User.User(user.FullName, user.PhoneNumber, user.EmailAddress,
                 user.BirthPlace, user.BirthDate, user.Description, hashedPassword, hashedPassword, salt, user.IsBlock,
                 fileName);
 
             try
             {
-                // افزودن و ذخیره کاربر جدید در پایگاه داده
                 await _userRepository.AddEntity(newUser);
                 await _userRepository.SaveChanges();
                 return CreateUserResult.Success;
             }
             catch (Exception ex)
             {
-                // مدیریت خطا در عملیات ذخیره
-                // می‌توانید لاگ‌گیری کنید یا اقدام مناسب انجام دهید
                 Console.WriteLine($"Error creating user: {ex.Message}");
                 return CreateUserResult.Error;
             }
@@ -177,7 +170,7 @@ namespace Resume.Application.Services.Implementation.User
 
         async Task<UpdateUserResult> IUserService.EditUser(UpdateUserDto user, IFormFile avatarImage)
         {
-            // دریافت کاربر از دیتابیس
+
             var existingUser = await _userRepository
                 .GetQuery()
                 .FirstOrDefaultAsync(x => x.Id == user.Id);
@@ -187,7 +180,6 @@ namespace Resume.Application.Services.Implementation.User
                 return UpdateUserResult.NotFoundUser;
             }
 
-            // مدیریت تصویر آواتار
             if (avatarImage != null && avatarImage.Length > 0)
             {
                 var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "user");
@@ -208,7 +200,6 @@ namespace Resume.Application.Services.Implementation.User
                 existingUser.Avatar = fileName;
             }
 
-            // بررسی تغییر رمز عبور (در صورت لزوم)
             if (!string.IsNullOrEmpty(user.Password))
             {
                 var salt = NewPasswordHasher.GenerateSalt();
@@ -219,7 +210,6 @@ namespace Resume.Application.Services.Implementation.User
                 existingUser.PasswordSalt = salt;
             }
 
-            // بروزرسانی سایر اطلاعات کاربر
             existingUser.FullName = user.FullName;
             existingUser.PhoneNumber = user.PhoneNumber;
             existingUser.EmailAddress = user.EmailAddress;
@@ -229,7 +219,6 @@ namespace Resume.Application.Services.Implementation.User
             existingUser.IsBlock = user.IsBlock;
             existingUser.UpdateDate = DateTime.UtcNow;
 
-            // ذخیره تغییرات
             _userRepository.UpdateEntity(existingUser);
             await _userRepository.SaveChanges();
 

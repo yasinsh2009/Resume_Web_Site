@@ -15,12 +15,9 @@ namespace Resume.Domain.Dtos.Project.ProjectCategory
         public string? Description { get; set; }
     }
 
-    public class CreateProjectCategoryResult(bool isSuccess, string? message = null)
+    public enum CreateProjectCategoryResult
     {
-        public bool IsSuccess { get; set; } = isSuccess;
-        public string? Message { get; set; } = message;
-
-        public static CreateProjectCategoryResult Success() => new CreateProjectCategoryResult(true);
-        public static CreateProjectCategoryResult Failed(string message) => new CreateProjectCategoryResult(false, message);
+        Success,
+        Error
     }
 }

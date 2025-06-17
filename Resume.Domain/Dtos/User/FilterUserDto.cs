@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Resume.Domain.Dtos.User
+﻿namespace Resume.Domain.Dtos.User
 {
     public class FilterUserDto
     {

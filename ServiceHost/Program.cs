@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Resume.Application.Services.Implementation.User;
-using Resume.Application.Services.Interface.User;
 using Resume.Domain.Context;
-using Resume.Domain.Repository;
 using ServiceHost.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -55,31 +55,34 @@ namespace Resume.Application.Services.Implementation.Project
 
         public async Task<CreateProjectCategoryResult> CreateProjectCategory(CreateProjectCategoryDto command, IFormFile? image)
         {
-            if (command == null)
-            {
-                return CreateProjectCategoryResult.Failed("داده های ورودی نامعتبر است.");
-            }
-
             try
             {
-                if (image == null || image.Length == 0)
+                var newProjectCategory;
+                if (image != null)
                 {
-                    return CreateProjectCategoryResult.Failed("تصویر دسته بندی پروژه الزامی است");
+                    var uploadDirectory =
+                        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "projectCategory");
+                    if (!Directory.Exists(uploadDirectory))
+                    {
+                        Directory.CreateDirectory(uploadDirectory);
+                    }
+
+                    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image?.FileName)}";
+                    var filePath = Path.Combine(uploadDirectory, fileName);
+
+                    await using var stream = new FileStream(filePath, FileMode.Create); 
+                    await image.CopyToAsync(stream);
+                    
+
+                    newProjectCategory = new ProjectCategory(fileName, command.Title, command.Description);
+
+                    await _projectCategoryRepository.AddEntity(newProjectCategory);
+                    await _projectCategoryRepository.SaveChanges();
+
+                    return CreateProjectCategoryResult.Success();
                 }
 
-                var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "projectCategory");
-                if (!Directory.Exists(uploadDirectory))
-                {
-                    Directory.CreateDirectory(uploadDirectory);
-                }
-
-                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-                var filePath = Path.Combine(uploadDirectory, fileName);
-
-                await using var stream = new FileStream(filePath, FileMode.Create);
-                await image.CopyToAsync(stream);
-
-                var newProjectCategory = new ProjectCategory(fileName, command.Title, command.Description);
+                newProjectCategory = new ProjectCategory(null, command.Title, command.Description);
 
                 await _projectCategoryRepository.AddEntity(newProjectCategory);
                 await _projectCategoryRepository.SaveChanges();

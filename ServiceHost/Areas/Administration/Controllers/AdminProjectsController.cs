@@ -31,28 +31,32 @@ namespace ServiceHost.Areas.Administration.Controllers
         }
 
         [HttpPost("create-project-category"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateProjectCategory(CreateProjectCategoryDto projectCategory, IFormFile image)
+        public async Task<IActionResult> CreateProjectCategory(CreateProjectCategoryDto projectCategory,
+            IFormFile? image)
         {
             if (!ModelState.IsValid)
             {
-                TempData[("ErrorMessage")] = "لطفا فیلد های لازم را به درستی پر کنید.";
-                return View(projectCategory);
+                return View();
             }
 
             var result = await projectService.CreateProjectCategory(projectCategory, image);
 
-            if (result.IsSuccess)
+            switch (result)
             {
-                TempData[("SuccessMessage")] = "دسته بندی نمونه کار با موفقیت ایجاد شد.";
-                return RedirectToAction("FilterProjectCategories", "AdminProjects",
-                    new { area = "Administration" });
+                case CreateProjectCategoryResult.Success:
+                    TempData[("SuccessMessage")] = "دسته بندی نمونه کار با موفقیت ایجاد شد.";
+                    return RedirectToAction("FilterProjectCategories", "AdminProjects",
+                        new { area = "Administration" });
+                case CreateProjectCategoryResult.Error:
+                    TempData["ErrorMessage"] = "ایجاد دسته بندی پروژه با خطا مواجه شد.";
+                    return View(projectCategory);
             }
 
-            TempData["ErrorMessage"] = result.Message ?? "ایجاد دسته بندی پروژه با خطا مواجه شد.";
-            return View(projectCategory);
+            return View();
         }
+    
 
-        #endregion
+    #endregion
 
         #region Edit - Project - Category
 
