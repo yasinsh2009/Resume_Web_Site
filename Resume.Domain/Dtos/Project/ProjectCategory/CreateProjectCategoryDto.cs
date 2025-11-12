@@ -18,6 +18,7 @@ namespace Resume.Domain.Dtos.Project.ProjectCategory
     public enum CreateProjectCategoryResult
     {
         Success,
-        Error
+        Error,
+        Failed
     }
 }

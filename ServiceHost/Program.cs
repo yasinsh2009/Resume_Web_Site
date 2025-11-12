@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Resume.Domain.Context;
 using ServiceHost.Configuration;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,10 +19,9 @@ builder.Services.RegisterService();
 
 #region DatabaseConfig
 
-var connectionString = builder.Configuration.GetConnectionString("Resume_Web_Site");
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDbContext<DatabaseContext>(option =>
-      option.UseSqlServer(connectionString), ServiceLifetime.Transient);
 
 #endregion
 

@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using MarketPlace.Application.Utilities;
+﻿using MarketPlace.Application.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Resume.Application.Services.Interface.Project;
@@ -57,7 +56,7 @@ namespace Resume.Application.Services.Implementation.Project
         {
             try
             {
-                var newProjectCategory;
+                string fileName = null;
                 if (image != null)
                 {
                     var uploadDirectory =
@@ -67,32 +66,24 @@ namespace Resume.Application.Services.Implementation.Project
                         Directory.CreateDirectory(uploadDirectory);
                     }
 
-                    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image?.FileName)}";
+                    fileName = $"{Guid.NewGuid()}{Path.GetExtension(image?.FileName)}";
                     var filePath = Path.Combine(uploadDirectory, fileName);
 
-                    await using var stream = new FileStream(filePath, FileMode.Create); 
+                    await using var stream = new FileStream(filePath, FileMode.Create);
                     await image.CopyToAsync(stream);
-                    
-
-                    newProjectCategory = new ProjectCategory(fileName, command.Title, command.Description);
-
-                    await _projectCategoryRepository.AddEntity(newProjectCategory);
-                    await _projectCategoryRepository.SaveChanges();
-
-                    return CreateProjectCategoryResult.Success();
                 }
 
-                newProjectCategory = new ProjectCategory(null, command.Title, command.Description);
+                var newProjectCategory = new ProjectCategory(command.Title, command.Description, fileName);
 
                 await _projectCategoryRepository.AddEntity(newProjectCategory);
                 await _projectCategoryRepository.SaveChanges();
 
-                return CreateProjectCategoryResult.Success();
+                return CreateProjectCategoryResult.Success;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error creating project category : {ex.Message}");
-                return CreateProjectCategoryResult.Failed("خطایی در ایجاد دسته بندی پروژه رخ داد.");
+                return CreateProjectCategoryResult.Failed;
             }
         }
 
