@@ -64,42 +64,45 @@
     </div>
 </form> *@
 
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    @foreach (var item in Model)
-    {
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <div class="card">
-                <div class="header bg-green">
-                    <h2>
-                        @item.Fullname
-                        @if (@item.EmailAddress != null)
-                        {
-                            <small>@item.EmailAddress</small>
-                        }
-                        else
-                        {
-                            <small>بدون ایمیل</small>
-                        }
-                    </h2>
-                    <ul class="header-dropdown m-r-0">
-                        <li>
-                            <a href="#" onclick="return false;">
-                                <i class="material-icons">info_outline</i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" onclick="return false;">
-                                <i class="material-icons">help_outline</i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="body">
-                    @item.Message
+
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-">
+                <div class="card">
+                    <div class="header bg-green">
+                        <h2>
+                            @item.Fullname
+                            @if (@item.EmailAddress != null)
+                            {
+                                <small>@item.EmailAddress</small>
+                            }
+                            else
+                            {
+                                <small>بدون ایمیل</small>
+                            }
+                        </h2>
+                        <ul class="header-dropdown m-r-0">
+                            <li>
+                                <a href="#" onclick="return false;">
+                                    <i class="material-icons">info_outline</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="return false;">
+                                    <i class="material-icons">help_outline</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="body">
+                        @item.Message
+                    </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
-
-

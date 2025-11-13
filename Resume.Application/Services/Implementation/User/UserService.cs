@@ -168,7 +168,7 @@ namespace Resume.Application.Services.Implementation.User
 
         }
 
-        async Task<UpdateUserResult> IUserService.EditUser(UpdateUserDto user, IFormFile avatarImage)
+        public async Task<UpdateUserResult> EditUser(UpdateUserDto user, IFormFile avatarImage)
         {
 
             var existingUser = await _userRepository
@@ -205,11 +205,12 @@ namespace Resume.Application.Services.Implementation.User
                 var salt = NewPasswordHasher.GenerateSalt();
                 var hashedPassword = NewPasswordHasher.HashPassword(user.Password, salt);
 
-                existingUser.Password = hashedPassword;
-                existingUser.ConfirmPassword = hashedPassword;
-                existingUser.PasswordSalt = salt;
+                
             }
 
+            existingUser.Password = user.Password;
+            existingUser.ConfirmPassword = user.ConfirmPassword;
+            existingUser.PasswordSalt = user.PasswordSalt;
             existingUser.FullName = user.FullName;
             existingUser.PhoneNumber = user.PhoneNumber;
             existingUser.EmailAddress = user.EmailAddress;
@@ -275,27 +276,34 @@ namespace Resume.Application.Services.Implementation.User
 
         public async Task<UserLoginResult> UserLogin(LoginDto login)
         {
-            var storedSalt = await GetStoredSalt(login.Identifier);
-            var storedHashedPassword = await GetStoredPassword(login.Identifier);
-            var hashedPassword = NewPasswordHasher.HashPassword(login.Password, storedSalt);
-            var isValidPassword = NewPasswordHasher.CompareHashes(hashedPassword, storedHashedPassword);
-
-            var user = await _userRepository
-                .GetQuery()
-                .AsQueryable()
-                .FirstOrDefaultAsync
-                (
-                x => x.PhoneNumber == login.Identifier ||
-                x.EmailAddress == login.Identifier &&
-                x.Password == hashedPassword
-                );
-
-            if (user == null)
+            try
             {
-                return UserLoginResult.UserNotFound;
-            }
+                //var storedSalt = await GetStoredSalt(login.Identifier);
+                //var storedHashedPassword = await GetStoredPassword(login.Identifier);
+                //var hashedPassword = NewPasswordHasher.HashPassword(login.Password, storedSalt);
+                //var isValidPassword = NewPasswordHasher.CompareHashes(hashedPassword, storedHashedPassword);
 
-            return isValidPassword ? UserLoginResult.Success : UserLoginResult.Error;
+                var user = await _userRepository
+                    .GetQuery()
+                    .AsQueryable()
+                    .FirstOrDefaultAsync
+                    (
+                    x => x.PhoneNumber == login.Identifier ||
+                    x.EmailAddress == login.Identifier &&
+                    x.Password == login.Password
+                    );
+
+                if (user == null)
+                {
+                    return UserLoginResult.UserNotFound;
+                }
+
+                return UserLoginResult.Success;
+            }
+            catch (Exception ex)
+            {
+                return UserLoginResult.Error;
+            }
         }
 
         public async Task<Domain.Entities.User.User> GetUserByPn(string phoneNumber)

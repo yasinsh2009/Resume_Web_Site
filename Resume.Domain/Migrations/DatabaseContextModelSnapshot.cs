@@ -62,7 +62,7 @@ namespace Resume.Domain.Migrations
 
                     b.HasIndex("ArticleCategoryId");
 
-                    b.ToTable("Articles", (string)null);
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("Resume.Domain.Entities.Blog.ArticleCategory", b =>
@@ -101,7 +101,7 @@ namespace Resume.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ArticleCategories", (string)null);
+                    b.ToTable("ArticleCategories");
                 });
 
             modelBuilder.Entity("Resume.Domain.Entities.Contact.Contact", b =>
@@ -140,7 +140,7 @@ namespace Resume.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts", (string)null);
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("Resume.Domain.Entities.Project.Project", b =>
@@ -182,7 +182,7 @@ namespace Resume.Domain.Migrations
 
                     b.HasIndex("ProjectCategoryId");
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Resume.Domain.Entities.Project.ProjectCategory", b =>
@@ -217,7 +217,7 @@ namespace Resume.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProjectCategories", (string)null);
+                    b.ToTable("ProjectCategories");
                 });
 
             modelBuilder.Entity("Resume.Domain.Entities.Resume.Education.Education", b =>
@@ -236,12 +236,12 @@ namespace Resume.Domain.Migrations
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("EducatioStartDate")
+                    b.Property<string>("EducationEndDate")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("EducationEndDate")
+                    b.Property<string>("EducationStartDate")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -249,7 +249,7 @@ namespace Resume.Domain.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UnivercityName")
+                    b.Property<string>("UniversityName")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
@@ -259,7 +259,7 @@ namespace Resume.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Educations", (string)null);
+                    b.ToTable("Educations");
                 });
 
             modelBuilder.Entity("Resume.Domain.Entities.Resume.Experience.Experience", b =>
@@ -301,7 +301,7 @@ namespace Resume.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Experiences", (string)null);
+                    b.ToTable("Experiences");
                 });
 
             modelBuilder.Entity("Resume.Domain.Entities.Resume.Skill.Skill", b =>
@@ -333,7 +333,7 @@ namespace Resume.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Skills", (string)null);
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("Resume.Domain.Entities.User.User", b =>
@@ -403,7 +403,7 @@ namespace Resume.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Resume.Domain.Entities.Blog.Article", b =>

@@ -102,7 +102,7 @@
                                             <span class="overlay-mask"></span>
                                         </a>
                                         @* <a class="enlarge cboxElement" href="#" title="Bills Project"><i class="fa fa-expand fa-fw"></i></a> *@
-                                        <a class="link" asp-area="Administration" asp-controller="AdminProjects" asp-action="EditProjects"><i class="material-icons">mode_edit</i></a>
+                                        <a class="link" asp-area="Administration" asp-controller="AdminProjects" asp-action="EditProject" asp-route-id="@item.Id"><i class="material-icons">mode_edit</i></a>
                                     </div>
                                     <div class="badge col-purple project-description">@item.ProjectTitle</div>
                                 </article>

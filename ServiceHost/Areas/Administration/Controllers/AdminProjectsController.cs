@@ -4,6 +4,7 @@ using Resume.Application.Services.Interface.Project;
 using Resume.Domain.Dtos.Project.Project;
 using Resume.Domain.Dtos.Project.ProjectCategory;
 using Resume.Domain.Dtos.Resume.Skill;
+using System.Threading.Tasks;
 
 namespace ServiceHost.Areas.Administration.Controllers
 {
@@ -119,9 +120,9 @@ namespace ServiceHost.Areas.Administration.Controllers
         #region Create - Project
 
         [HttpGet("create-project")]
-        public IActionResult CreateProject()
+        public async Task<IActionResult> CreateProject()
         {
-            var projectCategory = projectService.GetProjectCategories();
+            var projectCategory = await projectService.GetProjectCategories();
             ViewBag.Category = projectCategory;
 
             return View();
@@ -130,11 +131,8 @@ namespace ServiceHost.Areas.Administration.Controllers
         [HttpPost("create-project"), ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProject(CreateProjectDto project, IFormFile projectImage)
         {
-            if (!ModelState.IsValid)
-            {
-                TempData["ErrorMessage"] = "لطفاً تمامی فیلدها را به درستی پر کنید.";
-                return View(project);
-            }
+            var projectCategory = projectService.GetProjectCategories();
+            ViewBag.Category = projectCategory;
 
             var result = await projectService.CreateProject(project, projectImage);
 
@@ -146,8 +144,9 @@ namespace ServiceHost.Areas.Administration.Controllers
             else
             {
                 TempData["ErrorMessage"] = result.Message ?? "خطایی در ایجاد پروژه رخ داد.";
-                return View(project);
             }
+
+            return View(project);
         }
 
 

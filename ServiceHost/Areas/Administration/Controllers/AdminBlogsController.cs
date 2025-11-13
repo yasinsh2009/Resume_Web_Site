@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Resume.Application.Services.Implementation.Blog;
 using Resume.Application.Services.Interface.Blog;
 using Resume.Domain.Dtos.Blog.Article;
 using Resume.Domain.Dtos.Blog.ArticleCategory;
-using Resume.Domain.Dtos.Project;
 
 namespace ServiceHost.Areas.Administration.Controllers
 {
@@ -85,6 +83,9 @@ namespace ServiceHost.Areas.Administration.Controllers
         [HttpPost("create-article"), ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateArticle(CreateArticleDto article, IFormFile image)
         {
+            var articleCategory = await blogService.GetAllCategories();
+            ViewBag.Category = articleCategory;
+
             if (!ModelState.IsValid)
             {
                 TempData["ErrorMessage"] = "لطفاً تمامی فیلدها را به درستی پر کنید.";

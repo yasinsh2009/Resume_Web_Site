@@ -50,17 +50,13 @@ namespace Resume.Application.Services.Implementation.Blog
                 .ToListAsync();
         }
 
-        public async Task<List<GetAllCategoriesDto>> GetAllCategories()
+        public async Task<object> GetAllCategories()
         {
             return await _articleCategoryRepository
                 .GetQuery()
                 .AsQueryable()
                 .Where(x => !x.IsDelete)
-                .Select(x => new GetAllCategoriesDto
-                {
-                    CategoryId = x.Id,
-                    ArticleCategoryTitle = x.Title,
-                }).OrderByDescending(x => x.CategoryId)
+                .Select(c => new { c.Id, c.Title }).OrderByDescending(x => x.Id)
                 .ToListAsync();
 
         }
@@ -149,23 +145,33 @@ namespace Resume.Application.Services.Implementation.Blog
 
             try
             {
-                // تعیین مسیر ذخیره‌سازی تصویر
-                var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "article");
-                if (!Directory.Exists(uploadDirectory))
+                string fileName = null;
+                if (image is not null)
                 {
-                    Directory.CreateDirectory(uploadDirectory);
+                    // تعیین مسیر ذخیره‌سازی تصویر
+                    var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "article");
+                    if (!Directory.Exists(uploadDirectory))
+                    {
+                        Directory.CreateDirectory(uploadDirectory);
+                    }
+
+                    fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+                    var filePath = Path.Combine(uploadDirectory, fileName);
+
+                    // ذخیره فایل به‌صورت آسنکرون
+                    await using var stream = new FileStream(filePath, FileMode.Create);
+                    await image.CopyToAsync(stream);
                 }
 
-                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-                var filePath = Path.Combine(uploadDirectory, fileName);
-
-                // ذخیره فایل به‌صورت آسنکرون
-                await using var stream = new FileStream(filePath, FileMode.Create);
-                await image.CopyToAsync(stream);
-
                 // ایجاد مقاله جدید
-                var newArticle =
-                    new Article(command.Title, command.ShortDescription, command.Description, fileName);
+                var newArticle = new Article
+                {
+                    ArticleCategoryId = command.ArticleCategoryId,
+                    Title = command.Title,
+                    ShortDescription= command.ShortDescription,
+                    Description = command.Description,
+                    Image = fileName
+                };
 
                 await _articleRepository.AddEntity(newArticle);
                 await _articleRepository.SaveChanges();

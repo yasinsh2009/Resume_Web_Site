@@ -158,16 +158,13 @@ namespace Resume.Application.Services.Implementation.Project
 
         #region Get - Project - Categories
 
-        public async Task<List<GetAllProjectCategoriesDto>> GetProjectCategories()
+        public async Task<object> GetProjectCategories()
         {
             return await _projectCategoryRepository
                 .GetQuery()
                 .Where(x => !x.IsDelete)
-                .Select(x => new GetAllProjectCategoriesDto
-                {
-                    CategoryId = x.Id,
-                    ProjectCategoryTitle = x.Title
-                }).OrderByDescending(x => x.CategoryId)
+                .Select(x => new { x.Id, x.Title })
+                .OrderByDescending(x => x.Id)
                 .ToListAsync();
         }
 
@@ -202,7 +199,7 @@ namespace Resume.Application.Services.Implementation.Project
 
         #region Create - Project
 
-        public async Task<CreateProjectResult> CreateProject(CreateProjectDto command, IFormFile projectImage)
+        public async Task<CreateProjectResult> CreateProject(CreateProjectDto command, IFormFile? projectImage)
         {
             if (command == null)
             {
@@ -211,20 +208,29 @@ namespace Resume.Application.Services.Implementation.Project
 
             try
             {
-                var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "project");
-                if (!Directory.Exists(uploadDirectory))
+                string fileName = null;
+                if (projectImage is not null)
                 {
-                    Directory.CreateDirectory(uploadDirectory);
+                    var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "content", "project");
+                    if (!Directory.Exists(uploadDirectory))
+                    {
+                        Directory.CreateDirectory(uploadDirectory);
+                    }
+
+                    fileName = $"{Guid.NewGuid()}{Path.GetExtension(projectImage.FileName)}";
+                    var filePath = Path.Combine(uploadDirectory, fileName);
+
+                    await using var stream = new FileStream(filePath, FileMode.Create);
+                    await projectImage.CopyToAsync(stream);
                 }
 
-                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(projectImage.FileName)}";
-                var filePath = Path.Combine(uploadDirectory, fileName);
-
-                await using var stream = new FileStream(filePath, FileMode.Create);
-                await projectImage.CopyToAsync(stream);
-
-                var newProject = new Domain.Entities.Project.Project(fileName, command.ProjectTitle,
-                    command.Description);
+                var newProject = new Domain.Entities.Project.Project
+                {
+                    ProjectCategoryId = command.ProjectCategoryId,
+                    ProjectTitle = command.ProjectTitle,
+                    Description = command.Description,
+                    ProjectImage = fileName
+                };
 
                 await _projectRepository.AddEntity(newProject);
                 await _projectRepository.SaveChanges();

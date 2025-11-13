@@ -12,8 +12,8 @@ using Resume.Domain.Context;
 namespace Resume.Domain.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250329101257_Create_Project_Category_Entity_and_Update_Project_Entity")]
-    partial class Create_Project_Category_Entity_and_Update_Project_Entity
+    [Migration("20251113081356_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -239,12 +239,12 @@ namespace Resume.Domain.Migrations
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("EducatioStartDate")
+                    b.Property<string>("EducationEndDate")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("EducationEndDate")
+                    b.Property<string>("EducationStartDate")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -252,7 +252,7 @@ namespace Resume.Domain.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UnivercityName")
+                    b.Property<string>("UniversityName")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");

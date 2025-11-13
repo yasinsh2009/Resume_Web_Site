@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Resume.Domain.Dtos.Project.Project;
 using Resume.Domain.Dtos.Project.ProjectCategory;
+using Resume.Domain.Entities.Project;
 
 namespace Resume.Application.Services.Interface.Project;
 
@@ -21,7 +22,7 @@ public interface IProjectService : IAsyncDisposable
     Task<CreateProjectCategoryResult> CreateProjectCategory(CreateProjectCategoryDto command, IFormFile? image);
     Task<EditProjectCategoryDto> GetProjectCategoryForEdit(long id);
     Task<EditProjectCategoryResult> EditProjectCategory(EditProjectCategoryDto command, IFormFile? image);
-    Task<List<GetAllProjectCategoriesDto>> GetProjectCategories();
+    Task<object> GetProjectCategories();
 
     #endregion
 }

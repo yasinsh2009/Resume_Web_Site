@@ -7,7 +7,7 @@
 
 <partial name="_JqueryValidators" />
 
-<!-- نمایش پیام‌های موفقیت و خطا -->
+@* <!-- نمایش پیام‌های موفقیت و خطا -->
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">
@@ -19,7 +19,7 @@
     <div class="alert alert-danger">
         @TempData["ErrorMessage"]
     </div>
-}
+} *@
 
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -67,15 +67,32 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row clearfix">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="projectImage">آپلود تصویر نمونه کار</label>
-                                <input type="file" class="form-control-file" name="projectImage" id="projectImage" accept="image/*">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="form-line">
+                                @if (ViewBag.Category != null)
+                                {
+                                    <select class="browser-default" asp-for="ProjectCategoryId" asp-items="@(new SelectList(ViewBag.Category, "Id", "Title"))">
+                                        <option value="" disabled="" selected="">دسته بندی مورد نظر را انتخاب نمایید...</option>
+                                    </select>
+                                    <span class="text-danger" asp-validation-for="ProjectCategoryId"></span>
+                                }
+                                else
+                                {
+                                    <select class="browser-default">
+                                        <option value="" disabled="" selected="">No categories available.</option>
+                                    </select>
+                                }
                             </div>
                         </div>
-                        <button type="submit" class="btn-hover color-5 btn-block w-100 rounded">ثبت اطلاعات</button>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="projectImage">آپلود تصویر نمونه کار</label>
+                            <input type="file" class="form-control-file" name="projectImage" id="projectImage" accept="image/*">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-hover color-5 btn-block w-100 rounded">ثبت اطلاعات</button>
                 </div>
             </form>
         </div>

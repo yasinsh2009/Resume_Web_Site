@@ -35,7 +35,7 @@
             <form asp-area="Administration" asp-controller="AdminBlogs" asp-action="CreateArticle" method="post" enctype="multipart/form-data">
                 <div class="body">
                     <div class="row clearfix">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <div class="form-line">
                                     <input type="text" class="form-control mb-2" asp-for="Title" placeholder="عنوان مقاله">
@@ -43,12 +43,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control mb-2" asp-for="ShortDescription" placeholder="توضیحات کوتاه (اختیاری)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <div class="form-line">
                                     @if (ViewBag.Category != null)
                                     {
-                                        <select class="browser-default" asp-for="ArticleCategoryId" asp-items='new SelectList(ViewBag.Category, "CategoryId", "ArticleCategoryTitle")'>
+                                        <select class="browser-default" asp-for="ArticleCategoryId" asp-items="@(new SelectList(ViewBag.Category, "Id", "Title"))">
                                             <option value="" disabled="" selected="">دسته بندی مورد نظر را انتخاب نمایید...</option>
                                         </select>
                                         <span class="text-danger" asp-validation-for="ArticleCategoryId"></span>
@@ -62,15 +69,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" class="form-control mb-2" asp-for="ShortDescription" placeholder="توضیحات کوتاه (اختیاری)">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row clearfix">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="form-line">
@@ -79,8 +77,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row clearfix">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="form-line">

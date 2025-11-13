@@ -11,7 +11,7 @@ public interface IBlogService : IAsyncDisposable
 
     Task<List<FilterArticleCategoriesDto>> GetAllArticleCategories();
     Task<CreateArticleCategoryResult> CreateArticleCategory(CreateArticleCategoryDto command, IFormFile image);
-    Task<List<GetAllCategoriesDto>> GetAllCategories();
+    Task<object> GetAllCategories();
 
     #endregion
 
